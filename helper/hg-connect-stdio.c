@@ -231,7 +231,7 @@ struct hg_connection *hg_connect_stdio(const char *url, int flags)
 			port = get_port(ssh_host);
 
 		proc->trace2_child_class = "transport/ssh";
-		while (*remote_path == '/')
+		if (*remote_path == '/')
 			remote_path++;
 		fill_ssh_args(proc, ssh_host, port, protocol_v0, flags);
 	} else if (protocol == PROTO_FILE || protocol == PROTO_LOCAL) {
