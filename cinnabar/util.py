@@ -928,6 +928,14 @@ class MemoryCPUReporter(Thread):
         self.join()
 
 
+def StrictVersion(version):
+    try:
+        from distutils.version import StrictVersion as SV
+    except ImportError:
+        from packaging.version import Version as SV
+    return SV(version)
+
+
 class VersionCheck(Thread):
     def __init__(self):
         super(VersionCheck, self).__init__()
@@ -942,7 +950,6 @@ class VersionCheck(Thread):
     def run(self):
         from cinnabar import VERSION
         from cinnabar.git import Git, GitProcess
-        from distutils.version import StrictVersion
         if self.skip_check:
             return
         REPO = 'https://github.com/glandium/git-cinnabar'

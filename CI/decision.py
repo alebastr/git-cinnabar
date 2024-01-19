@@ -8,7 +8,10 @@ BASE_DIR = os.path.dirname(__file__)
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, '..'))
 
-from distutils.version import StrictVersion
+try:
+    from distutils.version import StrictVersion
+except ImportError:
+    from packaging.version import Version as StrictVersion
 from itertools import chain
 
 import osx  # noqa: F401

@@ -297,7 +297,10 @@ def old_compatible_python():
 
 def old_helper_head():
     from cinnabar import VERSION
-    from distutils.version import StrictVersion
+    try:
+        from distutils.version import StrictVersion
+    except ImportError:
+        from packaging.version import Version as StrictVersion
     version = VERSION
     if version.endswith('a'):
         v = StrictVersion(VERSION[:-1]).version

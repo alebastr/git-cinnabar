@@ -6,8 +6,7 @@ from cinnabar.git import (
     Git,
     split_ls_tree,
 )
-from cinnabar.util import one
-from distutils.version import StrictVersion
+from cinnabar.util import StrictVersion, one
 
 
 class Version(StrictVersion):
