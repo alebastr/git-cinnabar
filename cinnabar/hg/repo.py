@@ -95,9 +95,18 @@ try:
         url,
     )
     try:
-        from mercurial.sshpeer import instance as sshpeer
+        from mercurial.sshpeer import make_peer
+        from mercurial.utils.urlutil import path as make_path
+
+        def sshpeer(ui, path, create, **kwargs):
+            path = make_path(ui, rawloc=path)
+            return make_peer(ui, path, create, **kwargs)
+
     except ImportError:
-        from mercurial.sshrepo import instance as sshpeer
+        try:
+            from mercurial.sshpeer import instance as sshpeer
+        except ImportError:
+            from mercurial.sshrepo import instance as sshpeer
     try:
         from mercurial.utils import procutil
     except ImportError:
@@ -1279,14 +1288,10 @@ if changegroup:
         if quotecommand:
             procutil.quotecommand = override_quotecommand
 
-        class override_url(object):
+        class override_url(url):
             def __init__(self, *args, **kwargs):
-                self.scheme = b'ssh'
-                self.host = b'localhost'
-                self.port = None
-                self.path = path
-                self.user = b'user'
-                self.passwd = None
+                super().__init__(b'ssh://user@localhost/')
+                self.path = self._origpath = path
         urlutil.url = override_url
 
         repo = sshpeer(ui, path, False)
